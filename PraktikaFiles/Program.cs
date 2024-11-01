@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace PraktikaFiles
+﻿namespace PraktikaFiles
 {
     internal class Program
     {
@@ -24,105 +22,14 @@ namespace PraktikaFiles
                 using (StreamWriter sw = File.CreateText(FileName)) ;
             }
 
-            Add(customer1);
-            Add(customer2);
-            Add(customer3);
-            DeleteCustomer(3);
-            Update(1, "John", "Wick", "099666777");
-            GetAll();
-        }
 
-        static void Add(Customer customer)
-        {
-            List<Customer> customers = new List<Customer>();
+            customer1.Add();
+            customer2.Add();
+            customer3.Add();
+            Customer.DeleteCustomer(3);
+            Customer.Update(1, "John", "Wick", "099666777");
+            Customer.GetAll();
 
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string json = sr.ReadToEnd();
-                customers = JsonConvert.DeserializeObject<List<Customer>>(json);
-
-                if (customers == null)
-                {
-                    customers = new List<Customer>();
-                }
-            }
-
-            if (customers.Any(c => c.Id == customer.Id))
-            {
-                Console.WriteLine($"A customer with ID {customer.Id} already exists. Cannot add duplicate ID.");
-                return;
-            }
-
-            customers.Add(customer);
-
-            using (StreamWriter sw = new StreamWriter(FileName))
-            {
-                string updatedJson = JsonConvert.SerializeObject(customers);
-                sw.Write(updatedJson);
-            }
-        }
-
-
-        static void DeleteCustomer(int id)
-        {
-            List<Customer> customers = new List<Customer>();
-
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string json = sr.ReadToEnd();
-                customers = JsonConvert.DeserializeObject<List<Customer>>(json);
-            }
-
-            customers.RemoveAll(c => c.Id == id);
-
-            using (StreamWriter sw = new StreamWriter(FileName))
-            {
-                string updatedJson = JsonConvert.SerializeObject(customers);
-                sw.Write(updatedJson);
-            }
-        }
-
-        static void GetAll()
-        {
-            List<Customer> customers = new List<Customer>();
-
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string json = sr.ReadToEnd();
-                customers = JsonConvert.DeserializeObject<List<Customer>>(json);
-            }
-
-            foreach (var customer in customers)
-            {
-                Console.WriteLine(customer.ToString());
-            }
-        }
-
-        static void Update(int id, string newFirstName, string newLastName, string newPhoneNumber)
-        {
-            List<Customer> customers = new List<Customer>();
-
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string json = sr.ReadToEnd();
-                customers = JsonConvert.DeserializeObject<List<Customer>>(json);
-            }
-
-            foreach (var customer in customers)
-            {
-                if (customer.Id == id)
-                {
-                    customer.FirsName = newFirstName;
-                    customer.LastName = newLastName;
-                    customer.PhoneNumber = newPhoneNumber;
-                }
-            }
-
-            using (StreamWriter sw = new StreamWriter(FileName))
-            {
-                string updatedJson = JsonConvert.SerializeObject(customers);
-                sw.Write(updatedJson);
-            }
         }
     }
 }
